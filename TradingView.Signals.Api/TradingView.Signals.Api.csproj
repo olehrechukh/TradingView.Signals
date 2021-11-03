@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <DockerDefaultTargetOS>Windows</DockerDefaultTargetOS>
+    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <AssemblyName>TradingView.Signals.Api</AssemblyName>
     <RootNamespace>TradingView.Signals.Api</RootNamespace>
     <UserSecretsId>118748a6-d062-4c39-a03d-2344e0d67ab4</UserSecretsId>

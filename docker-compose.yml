@@ -6,15 +6,14 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development
       - ExchangeSettings__ApiKey=9dnZa2uPwZk5igO0NaKtEjrxfacIYX8vmWGcdTbkPxLE0b4LzdpQfT9viq74wHzx
       - ExchangeSettings__ApiSecret=vRJcVeH0NUoDnaWzSj3NjVVg5nwukGsetAKW0PS7gzI749WmBWcKDoYB301uoDEN
+      - ElasticConfiguration__Uri=http://elasticsearch:9200
     image: local:backend
     build: ./
     ports:
       - "5000:80"
     networks:
       - elastic
-    depends_on:
-      - elasticsearch
-  
+
   elasticsearch:
    container_name: elasticsearch
    image: docker.elastic.co/elasticsearch/elasticsearch:7.9.2
@@ -45,6 +44,7 @@ services:
 networks:
   elastic:
     driver: bridge
+
 
 # volumes:
   # elasticsearch-data:

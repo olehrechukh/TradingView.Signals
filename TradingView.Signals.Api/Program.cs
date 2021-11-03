@@ -18,6 +18,7 @@ namespace TradingView.Signals.Api
                 .AddJsonFile(
                     $"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json",
                     optional: true)
+                .AddEnvironmentVariables()
                 .Build();
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
