@@ -39,6 +39,7 @@ namespace TradingView.Signals.Api
             services.AddRunner(Configuration);
             services.AddHttpClient();
             services.AddHealthChecks();
+            services.AddRouting(options => options.LowercaseUrls = true);
 
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
