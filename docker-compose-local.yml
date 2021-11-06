@@ -7,11 +7,13 @@ services:
       - ExchangeSettings__ApiKey=9dnZa2uPwZk5igO0NaKtEjrxfacIYX8vmWGcdTbkPxLE0b4LzdpQfT9viq74wHzx
       - ExchangeSettings__ApiSecret=vRJcVeH0NUoDnaWzSj3NjVVg5nwukGsetAKW0PS7gzI749WmBWcKDoYB301uoDEN
       - Serilog__WriteTo__1__Args__nodeUris=http://elasticsearch:9200
-    image: registry.digitalocean.com/hello-trading-view/back
+    image: local:backend
+    build: ./
     ports:
       - "5000:80"
     networks:
       - elastic
+      - ngrok
 
   elasticsearch:
    container_name: elasticsearch
@@ -40,9 +42,22 @@ services:
    networks:
     - elastic
 
+  ngrok:
+    container_name: ngrok
+    image: wernight/ngrok
+    depends_on:
+      - web
+    env_file:
+      - ./ngrok/.env
+    ports:
+      - "4040:4040"
+    networks:
+      - ngrok
+
 networks:
   elastic:
     driver: bridge
+  ngrok:
 
 volumes:
   elasticsearch-data:

@@ -6,6 +6,7 @@ using Binance.Net.Objects;
 using CryptoExchange.Net.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -37,6 +38,7 @@ namespace TradingView.Signals.Api
             services.AddHostedService<RunnerStarter>();
             services.AddRunner(Configuration);
             services.AddHttpClient();
+            services.AddHealthChecks();
 
             CultureInfo.DefaultThreadCurrentCulture = CultureInfo.InvariantCulture;
             CultureInfo.DefaultThreadCurrentUICulture = CultureInfo.InvariantCulture;
@@ -57,7 +59,11 @@ namespace TradingView.Signals.Api
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapHealthChecks("/");
+                endpoints.MapControllers();
+            });
         }
     }
 
