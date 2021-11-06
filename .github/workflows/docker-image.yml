@@ -5,8 +5,8 @@ on:
     branches: [ main ]
 
 env:
-  REGISTRY: "registry.digitalocean.com/your_registry"
-  IMAGE_NAME: "image_name"
+  REGISTRY: "registry.digitalocean.com/hello-trading-view"
+  IMAGE_NAME: "back"
 
 jobs:
   build_and_push:
