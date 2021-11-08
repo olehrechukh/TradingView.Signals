@@ -12,8 +12,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using TradingView.Signals.Api.Configurations;
 using TradingView.Signals.Api.Services;
 using TradingView.Signals.Api.Strategy;
+using TradingView.Signals.Api.Strategy.Models;
 
 namespace TradingView.Signals.Api
 {
@@ -74,10 +76,13 @@ namespace TradingView.Signals.Api
         {
             services.AddSingleton<EventsChannelAsync<IExchangeEvent>>();
             services.AddSingleton<Runner>();
-            services.AddOptions<ExchangeSettings>().Bind(configuration.GetSection("ExchangeSettings"));
+
+            services.AddOptions<ExchangeConfiguration>().Bind(configuration.GetSection("Exchange"));
+            services.AddOptions<BotConfiguration>().Bind(configuration.GetSection("Bot"));
+
             services.AddTransient(provider =>
             {
-                var options = provider.GetRequiredService<IOptions<ExchangeSettings>>();
+                var options = provider.GetRequiredService<IOptions<ExchangeConfiguration>>();
                 var factory = provider.GetRequiredService<IHttpClientFactory>();
                 var httpClient = factory.CreateClient();
 
@@ -89,11 +94,5 @@ namespace TradingView.Signals.Api
 
             return services;
         }
-    }
-
-    public class ExchangeSettings
-    {
-        public string ApiKey { get; set; }
-        public string ApiSecret { get; set; }
     }
 }

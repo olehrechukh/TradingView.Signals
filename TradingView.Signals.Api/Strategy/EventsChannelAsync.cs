@@ -6,6 +6,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using TradingView.Signals.Api.Configurations;
 
 namespace TradingView.Signals.Api.Strategy
 {
@@ -35,13 +37,14 @@ namespace TradingView.Signals.Api.Strategy
         private readonly ILogger<EventsChannelAsync<T>> logger;
         private const int MaxSize = 20_000;
         private readonly BufferBlock<T> events = new();
+        private readonly IOptions<BotConfiguration> configuration;
 
-        // private T lastRetrievedObject;
-        // private DateTime lastRetrieveDateTime;
-        public EventsChannelAsync(ILogger<EventsChannelAsync<T>> logger)
+        public EventsChannelAsync(ILogger<EventsChannelAsync<T>> logger, IOptions<BotConfiguration> configuration)
         {
             this.logger = logger;
+            this.configuration = configuration;
         }
+
         private bool isSizeLimitExceeded;
         private volatile bool isDisposed;
 
@@ -63,6 +66,12 @@ namespace TradingView.Signals.Api.Strategy
 
             if (isDisposed || CheckForMaxSize())
             {
+                return;
+            }
+
+            if (!configuration.Value.EnableTrading)
+            {
+                logger.LogInformation("Skipping event. Disabled trading, {@value}", @event);
                 return;
             }
 

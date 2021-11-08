@@ -2,6 +2,7 @@
 using System.Linq;
 using Binance.Net.Enums;
 using TradingView.Signals.Api.Strategy;
+using TradingView.Signals.Api.Strategy.Models;
 
 namespace TradingView.Signals.Api.Controllers
 {

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using TradingView.Signals.Api.Strategy;
+using TradingView.Signals.Api.Strategy.Models;
 
 namespace TradingView.Signals.Api.Controllers
 {
@@ -39,19 +40,19 @@ namespace TradingView.Signals.Api.Controllers
             return Ok();
         }
 
+        [HttpGet]
+        public string Health()
+        {
+            logger.LogInformation("New message: {value}", nameof(Health));
+
+            return "Now" + DateTime.UtcNow.ToLongTimeString();
+        }
+
         private static async ValueTask<string> GetMessage(HttpRequest request)
         {
             using var reader = new StreamReader(request.Body);
             var content = await reader.ReadToEndAsync();
             return content;
-        }
-
-        [HttpGet]
-        public IActionResult Health()
-        {
-            logger.LogInformation("New message: {value}", nameof(Health));
-
-            return Ok(DateTime.UtcNow);
         }
     }
 }

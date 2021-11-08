@@ -5,17 +5,12 @@ using Binance.Net;
 using Binance.Net.Enums;
 using Binance.Net.Objects.Spot.SpotData;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using TradingView.Signals.Api.Configurations;
+using TradingView.Signals.Api.Strategy.Models;
 
 namespace TradingView.Signals.Api.Strategy
 {
-    public interface IExchangeEvent
-    {
-    }
-
-    public record SignalEvent(string Symbol, OrderSide Side, decimal Price) : IExchangeEvent;
-
-    public record OrderEvent(BinancePlacedOrder Order) : IExchangeEvent;
-
     public class Runner
     {
         private readonly BinanceClient client;
@@ -28,6 +23,7 @@ namespace TradingView.Signals.Api.Strategy
         public Runner(
             BinanceClient client,
             EventsChannelAsync<IExchangeEvent> channel,
+            IOptions<BotConfiguration> configuration,
             ILogger<Runner> logger)
         {
             this.client = client;
@@ -59,7 +55,7 @@ namespace TradingView.Signals.Api.Strategy
         {
             order = null;
 
-            var signalEventSymbol = signalEvent.Symbol == "SOLUSD" ? "SOLUSDT" : signalEvent.Symbol;
+            var signalEventSymbol = signalEvent.Symbol == "ADAUSD" ? "ADAUSDT" : signalEvent.Symbol;
             var result = await client.Spot.Order.PlaceOrderAsync(signalEventSymbol, signalEvent.Side, OrderType.Market,
                 quantity);
 
