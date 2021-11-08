@@ -19,6 +19,7 @@ namespace TradingView.Signals.Api.Strategy
 
         private decimal Size = 0.06m;
         private BinancePlacedOrder order;
+        private readonly IOptions<BotConfiguration> configuration;
 
         public Runner(
             BinanceClient client,
@@ -28,6 +29,7 @@ namespace TradingView.Signals.Api.Strategy
         {
             this.client = client;
             this.channel = channel;
+            this.configuration = configuration;
             this.logger = logger;
         }
 
@@ -35,6 +37,12 @@ namespace TradingView.Signals.Api.Strategy
 
         private void Handle(IExchangeEvent exchangeEvent)
         {
+            if (!configuration.Value.EnableTrading)
+            {
+                logger.LogInformation("Skipping event. Disabled trading, {@value}", exchangeEvent);
+                return;
+            }
+
             switch (exchangeEvent)
             {
                 case SignalEvent signalEvent:

@@ -72,7 +72,7 @@ namespace TradingView.Signals.Api.Strategy
             if (!configuration.Value.EnableTrading)
             {
                 logger.LogInformation("Skipping event. Disabled trading, {@value}", @event);
-                return;
+                // return;
             }
 
             events.Post(@event);
